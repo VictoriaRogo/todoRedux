@@ -1,11 +1,13 @@
 import {createStore, applyMiddleware} from "redux";
 import { composeWithDevTools } from 'redux-devtools-extension';
-import todo from './reducer';
+import reducer from './reducer';
 
 const store = createStore(
-    todo, composeWithDevTools(
+    reducer, composeWithDevTools(
         applyMiddleware(),
     )
 );
+
+console.log('--store', store);
 
 export default store;
