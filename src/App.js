@@ -1,49 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css';
 import Form from "./Form";
 import List from "./List";
 import {connect} from 'react-redux';
 
-const initialState = [
-    {title: 'First', done: false},
-    {title: 'Second', done: false},
-    {title: 'Third', done: false}
-];
 
 function App(props) {
-    const [list, setList] = useState(initialState);
-    const addItem = (e) => {
-        e.preventDefault();
-        props.addTodo(e.target[0].value);
-        e.target[0].value = '';
-    };
-    const toggle = (i) => {
-        props.todos[i].done = !props.todos[i].done;
-        props.toggleTodo();
-    };
-    const updateTitle = (i, title) => {
-        props.todos[i].title = title;
-        props.updateTodo();
-    };
-    const deleteItem = (index) => {
-        setList(list.filter((el, i) => i !== index));
-    };
-    const swap = (id1, id2) => {
-        const copy = list.slice();
-        copy[id1] = list[id2];
-        copy[id2] = list[id1];
-        setList(copy);
-    };
-
     return (
         <div className="App">
-            <Form addItem={addItem}/>
+            <Form addItem={props.addTodo}/>
             <List
                 todoItems={props.todos}
-                toggle={toggle}
-                updateTitle={updateTitle}
-                deleteItem={deleteItem}
-                swap={swap}
+                toggle={props.toggleTodo}
+                updateTitle={props.updateTodo}
+                deleteItem={props.deleteTodo}
+                swap={props.swapTodo}
             />
         </div>
     );
@@ -55,8 +26,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     addTodo: (todo) => dispatch({type: 'TODO_ADD', payload: todo}),
-    toggleTodo: () => dispatch({type: 'TODO_TOGGLE'}),
-    updateTodo: () => dispatch({type: 'TODO_UPDATE'}),
+    toggleTodo: (index) => dispatch({type: 'TODO_TOGGLE', payload: index}),
+    updateTodo: (index, title) => dispatch({type: 'TODO_UPDATE', payload: {index, title}}),
+    deleteTodo: (index) => dispatch({type: 'TODO_DELETE', payload: index}),
+    swapTodo: (index1, index2) => dispatch({type: 'TODO_SWAP', payload: {index1, index2}}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
