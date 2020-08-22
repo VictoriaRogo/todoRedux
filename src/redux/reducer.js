@@ -32,7 +32,7 @@ const reducer = (state = initialState, action) => {
                 return {
                     ...state,
                     todos: state.todos.map((el, i) => {
-                        if (i === action.payload.index) {
+                        if (i === action.payload) {
                             el.done = !el.done
                         }
                         return el;
@@ -52,17 +52,17 @@ const reducer = (state = initialState, action) => {
             case 'TODO_DELETE':
                 return {
                     ...state,
-                    todos: state.todos.filter((el, i) => i !== action.payload.index)
+                    todos: state.todos.filter((el, i) => i !== action.payload)
                 };
 
             case 'TODO_SWAP':
                 return {
                     ...state,
                     todos: state.todos.map((el, i) => {
-                        if (i === action.index1) {
+                        if (i === action.payload.index1) {
                             return state.todos[action.payload.index2]
                         }
-                        if (i === action.index2) {
+                        if (i === action.payload.index2) {
                             return state.todos[action.payload.index1]
                         }
                         return el;
